@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+@NamedQuery(name = "User.findByEmailId", query = "SELECT u FROM User u WHERE u.email = :email") //:email es un parametro esperado
+
 @Data //constructor, getter, setter provider
 @Entity
 @DynamicInsert

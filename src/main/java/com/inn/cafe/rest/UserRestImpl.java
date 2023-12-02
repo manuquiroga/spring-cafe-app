@@ -1,6 +1,5 @@
-package com.inn.cafe.restImpl;
+package com.inn.cafe.rest;
 
-import com.inn.cafe.rest.UserRest;
 import com.inn.cafe.service.UserService;
 import com.inn.cafe.utils.CafeUtils;
 import com.inn.cafe.wrapper.UserWrapper;

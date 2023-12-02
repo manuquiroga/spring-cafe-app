@@ -1,4 +1,4 @@
-package com.inn.cafe.serviceImpl;
+package com.inn.cafe.service;
 
 import com.google.common.base.Strings;
 import com.inn.cafe.JWT.CustomerUsersDetailsService;
@@ -8,6 +8,7 @@ import com.inn.cafe.POJO.User;
 import com.inn.cafe.dao.UserDao;
 import com.inn.cafe.service.UserService;
 import com.inn.cafe.utils.CafeUtils;
+import com.inn.cafe.utils.EmailUtils;
 import com.inn.cafe.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     JwtFilter jwtFilter;
+
+    @Autowired
+    EmailUtils emailUtils;
 
 
     @Override
@@ -128,9 +132,9 @@ public class UserServiceImpl implements UserService {
             if(jwtFilter.isAdmin()){
                 Optional<User> optional = userDao.findById(Integer.parseInt(requestMap.get("id"))); //findById = JpaRepository method
                 if(!optional.isEmpty()){
-                    userDao.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
-                    //TODO: sendMailToAllAdmin(requestMap.get("status"), optional.get().getEmail(), userDao.getAllAdmins());
 
+                    userDao.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
+                    sendMailToAllAdmin(requestMap.get("status"), optional.get().getEmail(), userDao.getAllAdmins());
                     return CafeUtils.getResponseEntity("User status updated", HttpStatus.OK);
                 }
                 else{
@@ -144,6 +148,17 @@ public class UserServiceImpl implements UserService {
             ex.printStackTrace();
         }
         return CafeUtils.getResponseEntity("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private void sendMailToAllAdmin(String status, String user, List<String> allAdmins) {
+        String currentUser = jwtFilter.getCurrentUser();
+        allAdmins.remove(currentUser);
+        if(status!=null && status.equalsIgnoreCase("true")){
+            emailUtils.sendSimpleMesage(user, "User Approved", "Your account has been approved by " + currentUser, allAdmins);
+        }
+        else {
+            emailUtils.sendSimpleMesage(user, "User Disabled", "Your account has been disabled by " + currentUser, allAdmins);
+        }
     }
 
     @Override

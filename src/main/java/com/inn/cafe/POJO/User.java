@@ -8,6 +8,9 @@ import org.hibernate.annotations.NamedQuery;
 import jakarta.persistence.*;
 
 @NamedQuery(name = "User.findByEmailId", query = "SELECT u FROM User u WHERE u.email = :email") //:email es un parametro esperado
+@NamedQuery(name = "User.getAllUser", query = "SELECT new com.inn.cafe.wrapper.UserWrapper(u.id, u.name, u.email, u.contactNumber, u.status) FROM User u WHERE u.role = 'user'") //importante en queries usar el path completo de la clase
+@NamedQuery(name = "User.getAllAdmins", query = "SELECT new com.inn.cafe.wrapper.UserWrapper(u.id, u.name, u.email, u.contactNumber, u.status) FROM User u WHERE u.role = 'admin'")
+@NamedQuery(name = "User.updateStatus", query = "UPDATE User u SET u.status = :status WHERE u.id = :id")
 
 @Data //constructor, getter, setter provider
 @Entity

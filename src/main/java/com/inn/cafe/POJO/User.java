@@ -7,6 +7,9 @@ import org.hibernate.annotations.NamedQuery;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
+
 @NamedQuery(name = "User.findByEmailId", query = "SELECT u FROM User u WHERE u.email = :email") //:email es un parametro esperado
 @NamedQuery(name = "User.getAllUser", query = "SELECT new com.inn.cafe.wrapper.UserWrapper(u.id, u.name, u.email, u.contactNumber, u.status) FROM User u WHERE u.role = 'user'") //importante en queries usar el path completo de la clase
 @NamedQuery(name = "User.getAllAdmins", query = "SELECT u.email FROM User u WHERE u.role = 'admin'")
@@ -17,7 +20,7 @@ import jakarta.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -1,4 +1,4 @@
-package com.inn.cafe.service;
+package com.inn.cafe.serviceImpl;
 
 import com.google.common.base.Strings;
 import com.inn.cafe.JWT.CustomerUsersDetailsService;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Slf4j //marcador proporcionado por Lombok para simplificar la integración de logging
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
